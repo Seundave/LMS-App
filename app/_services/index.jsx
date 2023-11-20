@@ -7,21 +7,47 @@ const MASTER_URL =
 
 export const getCourseList = async () => {
   const query = gql`
-  query CourseList {
-    courseLists {
-      name
-      free
-      id
-      totalChapters
-      tag
-      sourceCode
-      banner {
-        url
+    query CourseList {
+      courseLists {
+        name
+        free
+        id
+        totalChapters
+        tag
+        sourceCode
+        banner {
+          url
+        }
       }
     }
-  }
   `;
 
+  const result = await request(MASTER_URL, query);
+  return result;
+};
+
+export const getCourseById = async (id) => {
+  const query = gql`
+    query course {
+      courseList(where: { id: "`+id+`" }) {
+        chapter {
+          ... on Chapter {
+            id
+            name
+            video {
+              url
+            }
+            youtubeUrl
+          }
+        }
+        description
+        id
+        name
+        free
+        totalChapters
+      }
+    }
+  `;
   const result = await request(MASTER_URL, query);
   return result;
 };
