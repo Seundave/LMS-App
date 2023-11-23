@@ -6,20 +6,31 @@ import VideoPlayer from "../_components/VideoPlayer";
 import CourseDetails from "../_components/CourseDetails";
 import EnrollmentSection from "../_components/EnrollmentSection";
 import OptionSection from "../_components/OptionSection";
+import { useUser } from "@clerk/nextjs";
 
 function CoursePreview({ params }) {
   const [courseDetail, setCourseDetails] = useState([]);
+  const [userCourse, setUserCourse] = useState([]);
+
+  console.log(userCourse)
+  
+  const { user } = useUser();
+  // console.log(user?.primaryEmailAddress?.emailAddress)
 
   console.log(courseDetail);
   useEffect(() => {
     // console.log(params.courseId);
     params.courseId ? getCourse(params.courseId) : null;
-  }, []);
+  }, [user]);
 
   const getCourse = () => {
-    getCourseById(params.courseId).then((res) => {
+    getCourseById(
+      params.courseId,
+      user?.primaryEmailAddress?.emailAddress
+    ).then((res) => {
       setCourseDetails(res.courseList);
-      // console.log(res.courseList);
+      setUserCourse(res?.userEnrollCourses[0])
+      console.log(res);
     });
   };
   return (
@@ -34,7 +45,10 @@ function CoursePreview({ params }) {
           </div>
           <div className="mt-5 md:mt-0">
             <OptionSection />
-            <EnrollmentSection courseDetail={courseDetail} />
+            <EnrollmentSection
+              courseDetail={courseDetail}
+              userCourse={userCourse}
+            />
           </div>
         </div>
       </div>
