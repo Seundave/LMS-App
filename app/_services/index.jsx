@@ -23,6 +23,7 @@ export const getCourseList = async () => {
   `;
 
   const result = await request(MASTER_URL, query);
+  console.log(result)
   return result;
 };
 

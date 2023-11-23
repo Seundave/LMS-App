@@ -6,7 +6,6 @@ import React from "react";
 function EnrollmentSection({ courseDetail, userCourse }) {
   const router = useRouter();
   const { user } = useUser();
-  console.log(courseDetail);
 
   const enrollCourse = async () => {
     if (user) {
@@ -20,6 +19,9 @@ function EnrollmentSection({ courseDetail, userCourse }) {
           await PublishCourse(res?.createUserEnrollCourse?.id).then(
             (result) => {
               console.log(result);
+              if (result) {
+                router.push("/view-course/" + courseDetail.id);
+              }
             }
           );
         }
@@ -36,7 +38,10 @@ function EnrollmentSection({ courseDetail, userCourse }) {
             Continue to Build Project, Access Source Code and Track your
             Progress for free!{" "}
           </h2>
-          <button className="p-2 w-full bg-purple-500 text-white rounded-lg text-[14px] mt-2 hover:bg-purple-700">
+          <button
+            className="p-2 w-full bg-purple-500 text-white rounded-lg text-[14px] mt-2 hover:bg-purple-700"
+            onClick={() => router.push("/view-course/" + courseDetail.id)}
+          >
             Continue
           </button>
         </div>
