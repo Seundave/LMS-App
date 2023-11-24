@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-function CategoryFilter() {
+function CategoryFilter({selectedCategory}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const filterOptions = [
     {
@@ -13,7 +13,7 @@ function CategoryFilter() {
     {
       id: 2,
       name: "React Js",
-      value: "react",
+      value: "reactjs",
     },
     {
       id: 3,
@@ -41,7 +41,7 @@ function CategoryFilter() {
               ? "border-purple-800 bg-purple-50 text-purple-800"
               : null
           }`}
-          onClick={() => setActiveIndex(index)}
+          onClick={() => {setActiveIndex(index); selectedCategory(item.value)}}
         >
           <h2>{item.name}</h2>
         </button>
