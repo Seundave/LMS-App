@@ -23,7 +23,7 @@ export const getCourseList = async () => {
   `;
 
   const result = await request(MASTER_URL, query);
-  console.log(result)
+  console.log(result);
   return result;
 };
 
@@ -34,10 +34,11 @@ export const getCourseById = async (id, userEmail) => {
       courseList(where: { id: "` +
     id +
     `" }) {
-        chapter {
+        chapter (first:30) {
           ... on Chapter {
             id
             name
+            chapterNumber
             video {
               url
             }
@@ -57,7 +58,12 @@ export const getCourseById = async (id, userEmail) => {
     `"}) {
         courseId
         userEmail
-        completedChapter
+        id
+        completedChapter {
+          ... on CompletedChapter {
+            chapterId
+          }
+        }
       }
     }
   `;
@@ -85,17 +91,45 @@ export const EnrollCourse = async (courseId, userEmail) => {
 };
 
 export const PublishCourse = async (id) => {
-  console.log(id)
+  console.log(id);
   const mutationQuery =
     gql`
     mutation EnrollCourse {
-      publishUserEnrollCourse(where: {id: "`+
+      publishUserEnrollCourse(where: {id: "` +
     id +
     `"}) {
         id
       }
     }
   `;
+  const result = await request(MASTER_URL, mutationQuery);
+  return result;
+};
+
+export const markChaptersCompleted = async (recordId, chapterNumber) => {
+  const mutationQuery =
+    gql`
+  mutation MarkChapterComplete {
+    updateUserEnrollCourse(
+      where: {id: "` +
+    recordId +
+    `"}
+      data: {completedChapter: {create: {CompletedChapter: {data: {chapterId: "` +
+    chapterNumber +
+    `"}}}}}
+    ) {
+      id
+    }
+    publishManyUserEnrollCoursesConnection(to: PUBLISHED) {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+  }
+  `;
+
   const result = await request(MASTER_URL, mutationQuery);
   return result;
 };
