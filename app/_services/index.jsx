@@ -133,3 +133,26 @@ export const markChaptersCompleted = async (recordId, chapterNumber) => {
   const result = await request(MASTER_URL, mutationQuery);
   return result;
 };
+
+export const GetUserCourseList=async(userEmail)=>{
+const query=gql`
+query UserCourseList {
+  userEnrollCourses(where: {userEmail: "`+userEmail+`"}) {
+    courseList {
+      banner {
+        url
+      }
+      description
+      name
+      id
+      free
+      tag
+      sourceCode
+      totalChapters
+    }
+  }
+}`
+
+const result = await request(MASTER_URL, query);
+  return result;
+}
