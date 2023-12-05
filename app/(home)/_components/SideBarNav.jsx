@@ -42,7 +42,7 @@ function SideBarNav() {
   return (
     <div className="h-full b-white border-r flex flex-col overflow-y-auto shadow-md">
       <div className="p-5 border-b">
-        <Image src="/next.svg" alt="logo" width={170} height={100} />
+        <Image src="/logo.svg" alt="logo" width={170} height={100} />
       </div>
       <div className="flex flex-col">
         {menuList.map((item, index) => (
